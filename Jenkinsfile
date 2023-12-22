@@ -29,7 +29,7 @@ pipeline {
         script {
           echo "Construindo a imagem docker ! "
           sh 'docker build -t ajwfl/imagemAvaliacao:latest .'
-#         dockerapp = docker.build("ajwfl/imagemAvaliacao :v${env.BUILD_ID}", '-f ./Dockerfile .')
+#         dockerapp = docker.build("ajwfl/imagemavaliacao :v${env.BUILD_ID}", '-f ./Dockerfile .')
         }
       }
     }
@@ -44,7 +44,7 @@ pipeline {
             usernamePassword(credentialsId: 'docker-credential', passwordVariable: 'passwd', usernameVariable: 'user'
           )]) {
             sh "docker login -u ${env.user} -p ${env.passwd}"
-            sh 'docker push ajwfl/imagemAvaliacao:latest'
+            sh 'docker push ajwfl/imagemavaliacao:latest'
           }
 
 
