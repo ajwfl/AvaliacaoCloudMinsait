@@ -9,72 +9,53 @@ pipeline {
     stage('Build') {
       steps {
         script {
-          echo "Construindo o projeto maven ! "
+          echo "Construindo o projeto maven, aguarde..."
           sh 'mvn clean package'
         }
       }
     }
 
-    stage('Testes unitarios usando o Maven ') {
+    stage('Testes') {
       steps {
         script {
-          echo "Executando testes unitários ! "
+          echo "Executando testes, aguarde..."
           sh 'mvn test'
         }
       }
     }
 
-    stage('Build Image') {
+    stage('Build Imagem Docker') {
       steps {
         script {
-          echo "Construindo a imagem docker ! "
-          sh 'docker build -t ajwfl/imagemavaliacao:latest .'
-          dockerapp = docker.build("ajwfl/imagemavaliacao :v${env.BUILD_ID}", '-f ./Dockerfile .')
+          echo "Construindo a imagem docker, aguarde..."
+          sh 'docker build -t gustavoasas/avaliacao-cloud:latest .'
         }
       }
     }
 
-    stage('Push Image DockerHub') {
+    stage('Push DockerHub') {
       steps {
         script {
-          echo "Enviando novas alterações para o DockerHub ! "
-
+          echo "Enviando novas alterações para o DockerHub, aguarde..."
 
           withCredentials([
             usernamePassword(credentialsId: 'docker-credential', passwordVariable: 'passwd', usernameVariable: 'user'
           )]) {
             sh "docker login -u ${env.user} -p ${env.passwd}"
-            sh "docker push ajwfl/imagemavaliacao:latest"
+            sh 'docker push gustavoasas/avaliacao-cloud:latest'
           }
-# 	  docker.withRegistry('https://registry.hub.docker.com','dockerhub'){
-#         dockerapp.push("v${env.BUILD_ID}")
-#         dockerapp.push("latest")
-
         }
       }
     }
 
-    stage('Deploy no Kubernetes') {
+    stage('Kubernetes Manifestos') {
       steps {
-           withKubeConfig([credentialsId: 'kubeconfig']){
-                echo "Aplicando manifestos do Kubernetes ! "
-                sh 'kubectl apply -f ./k8s/web-deployment.yaml'
-                sh 'kubectl apply -f ./k8s/mysql-deployment.yaml'
-           }
-
-#       withKubeConfig([credentialsId: 'kubeconfig']){
-#            // sh "echo 'passou' "
-#            sh "cd /var/jenkins_home/workspace/AvaliacaoCloudMinsait/k8s && kubectl apply -f web-service.yaml, web-deployment.yaml, mysql-deployment.yaml, mysql-service.yaml"
-#            // sh "kubectl set image deployment/web web=matheusmprado/sampletodoaula3:latest"
+        script {
+          echo "Aplicando manifestos do Kubernetes, aguarde..."
+          sh 'kubectl apply -f k8s/'
+          sh 'kubectl get all'
+        }
       }
-
-#   stage ("Verifica Kubernetes"){
-#       steps{
-#           withKubeConfig([credentialsId: 'kubeconfig']){
-#               sh "kubectl get all"
-#           }
-#       }
-    } 
+    }
   }
 }
-
