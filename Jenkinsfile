@@ -60,13 +60,6 @@ pipeline {
                 sh 'kubectl apply -f ./k8s/mysql-deployment.yaml'
             }
       }
-    }      
-    stage ("Verifica Kubernetes"){
-        steps{
-           withKubeConfig([credentialsId: 'kubeconfig']){
-               sh "kubectl get all"
-           }
-        }
     } 
   }
 }
