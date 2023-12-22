@@ -36,7 +36,7 @@ pipeline {
         script {
           echo "Construindo a imagem docker ! "
           sh 'docker build -t ajwfl/imagemavaliacao:latest .'
-          dockerapp = docker.build("ajwfl/imagemavaliacao :v${env.BUILD_ID}", '-f ./Dockerfile .')
+#        dockerapp = docker.build("ajwfl/imagemavaliacao :v${env.BUILD_ID}", '-f ./Dockerfile .')
         }
       }
     }
@@ -45,8 +45,6 @@ pipeline {
       steps {
         script {
           echo "Enviando novas alterações para o DockerHub ! "
-
-
           withCredentials([
             usernamePassword(credentialsId: 'docker-credential', passwordVariable: 'passwd', usernameVariable: 'user'
           )]) {
