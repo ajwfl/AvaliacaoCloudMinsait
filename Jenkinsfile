@@ -34,7 +34,7 @@ pipeline {
       }
     }
 
-    stage('Push DockerHub') {
+    stage('Push Image DockerHub') {
       steps {
         script {
           echo "Enviando novas alterações para o DockerHub ! "
@@ -44,16 +44,11 @@ pipeline {
             usernamePassword(credentialsId: 'docker-credential', passwordVariable: 'passwd', usernameVariable: 'user'
           )]) {
             sh "docker login -u ${env.user} -p ${env.passwd}"
-            sh 'docker push ajwfl/imagemavaliacao:latest'
+            sh "docker push ajwfl/imagemavaliacao:latest"
           }
-
-
-
 # 	  docker.withRegistry('https://registry.hub.docker.com','dockerhub'){
-#         dockerapp.push('latest')
 #         dockerapp.push("v${env.BUILD_ID}")
-
-
+#         dockerapp.push("latest")
 
         }
       }
