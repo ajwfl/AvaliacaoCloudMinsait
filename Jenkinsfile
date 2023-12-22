@@ -56,18 +56,17 @@ pipeline {
 
     stage('Deploy no Kubernetes') {
       steps {
-        script {
-          echo "Aplicando manifestos do Kubernetes ! "
-
-
-          sh 'kubectl apply -f k8s/'
-          sh 'kubectl get all'
+           withKubeConfig([credentialsId: 'kubeconfig']){
+                echo "Aplicando manifestos do Kubernetes ! "
+                sh 'kubectl apply -f .k8s/web-deployment.yaml'
+                sh 'kubectl apply -f .k8s/mysql-deployment.yaml'
+           }
 
 #       withKubeConfig([credentialsId: 'kubeconfig']){
 #            // sh "echo 'passou' "
-#            sh "cd /var/jenkins_home/workspace/AvaliacaoCloudMinsait/k8s && kubectl apply -f web-service.yaml,api-deployment.yaml,db-deployment.yaml,db-service.yaml"
+#            sh "cd /var/jenkins_home/workspace/AvaliacaoCloudMinsait/k8s && kubectl apply -f web-service.yaml, web-deployment.yaml, mysql-deployment.yaml, mysql-service.yaml"
 #            // sh "kubectl set image deployment/web web=matheusmprado/sampletodoaula3:latest"
-        }
+      }
 
 #   stage ("Verifica Kubernetes"){
 #       steps{
@@ -75,7 +74,7 @@ pipeline {
 #               sh "kubectl get all"
 #           }
 #       }
-#   } 
+    } 
   }
 }
 
