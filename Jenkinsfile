@@ -28,7 +28,7 @@ pipeline {
       steps {
         script {
           echo "Construindo a imagem docker ! "
-          sh 'docker build -t ajwfl/imagemAvaliacao:latest .'
+          sh 'docker build -t ajwfl/imagemavaliacao:latest .'
 #         dockerapp = docker.build("ajwfl/imagemavaliacao :v${env.BUILD_ID}", '-f ./Dockerfile .')
         }
       }
