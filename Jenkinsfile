@@ -58,8 +58,8 @@ pipeline {
       steps {
            withKubeConfig([credentialsId: 'kubeconfig']){
                 echo "Aplicando manifestos do Kubernetes ! "
-                sh 'kubectl apply -f .k8s/web-deployment.yaml'
-                sh 'kubectl apply -f .k8s/mysql-deployment.yaml'
+                sh 'kubectl apply -f ./k8s/web-deployment.yaml'
+                sh 'kubectl apply -f ./k8s/mysql-deployment.yaml'
            }
 
 #       withKubeConfig([credentialsId: 'kubeconfig']){
