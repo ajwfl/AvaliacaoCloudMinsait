@@ -46,14 +46,9 @@ pipeline {
             sh "docker login -u ${env.user} -p ${env.passwd}"
             sh "docker push ajwfl/imagemavaliacao:latest"
           }
-# 	  docker.withRegistry('https://registry.hub.docker.com','dockerhub'){
-#         dockerapp.push("v${env.BUILD_ID}")
-#         dockerapp.push("latest")
-
         }
       }
     }
-
     stage('Deploy no Kubernetes') {
       steps {
            withKubeConfig([credentialsId: 'kubeconfig']){
@@ -62,18 +57,13 @@ pipeline {
                 sh 'kubectl apply -f ./k8s/mysql-deployment.yaml'
            }
 
-#       withKubeConfig([credentialsId: 'kubeconfig']){
-#            // sh "echo 'passou' "
-#            sh "cd /var/jenkins_home/workspace/AvaliacaoCloudMinsait/k8s && kubectl apply -f web-service.yaml, web-deployment.yaml, mysql-deployment.yaml, mysql-service.yaml"
-#            // sh "kubectl set image deployment/web web=matheusmprado/sampletodoaula3:latest"
       }
-
-#   stage ("Verifica Kubernetes"){
-#       steps{
-#           withKubeConfig([credentialsId: 'kubeconfig']){
-#               sh "kubectl get all"
-#           }
-#       }
+    stage ("Verifica Kubernetes"){
+        steps{
+           withKubeConfig([credentialsId: 'kubeconfig']){
+               sh "kubectl get all"
+           }
+       }
     } 
   }
 }
