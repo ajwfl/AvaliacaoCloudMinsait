@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: meu-pod
+  labels:
+    app: minha-aplicacao
+    ambiente: desenvolvimento
+spec:
+  containers:
+    - name: web
+      image: nginx:latest
+    - name: banco-de-dados
+      image: mysql:latest
+      env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_passwd
+            - name: MYSQL_DATABASE
+              value: curso
+            - name: MYSQL_USER
+              value: ajwfl
+            - name: MYSQL_PASSWORD
+              value: ajwfl

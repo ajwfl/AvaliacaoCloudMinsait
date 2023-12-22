@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: meu-replicaset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: minha-aplicacao
+  template:
+    metadata:
+      labels:
+        app: minha-aplicacao
+    spec:
+      containers:
+        - name: web
+          image: nginx:latest
+        - name: banco-de-dados
+          image: mysql:latest
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: curso
+            - name: MYSQL_USER
+              value: ajwfl
+            - name: MYSQL_PASSWORD
+              value: ajwfl 
