@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-    stage('Kubernetes Manifestos') {
+    stage('Deploy do Kubernetes') {
       steps {
         script {
           echo "Aplicando manifestos do Kubernetes, aguarde..."
