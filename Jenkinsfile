@@ -9,7 +9,7 @@ pipeline {
     stage('Build Maven') {
       steps {
         script {
-          echo "Construindo o projeto maven, aguarde..."
+          echo "Construindo o projeto maven ..."
           sh "mvn clean package"
         }
       }
@@ -18,7 +18,7 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         script {
-          echo "Construindo a imagem docker, aguarde..."
+          echo "Construindo a imagem docker ..."
           dockerapp = docker.build("ajwfl/meu_app:v${env.BUILD_ID}", '-f Dockerfile .')
         }
       }
@@ -27,7 +27,7 @@ pipeline {
     stage('Push Docker Image') {
       steps {
         script {
-          echo "Enviando alterações para o DockerHub, aguarde..."
+          echo "Atualizando o DockerHub ..."
           docker.withRegistry("https://registry.hub.docker.com",'dockerhub'){
                         dockerapp.push("v${env.BUILD_ID}")
                         dockerapp.push("latest")
@@ -39,8 +39,10 @@ pipeline {
     stage('Deploy do Kubernetes') {
       steps {
         script {
-          echo "Aplicando manifestos do Kubernetes, aguarde..."
-          sh 'kubectl apply -f k8s/'
+          echo "Aplicando manifestos do Kubernetes ..."
+          withKubeConfig([credentialsId: 'kubeconfig']) {
+            sh "kubectl apply -f ./k8s/"
+        }
         }
       }
     }
