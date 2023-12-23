@@ -14,12 +14,11 @@ spec:
     spec:
       containers:
         - name: web
-          image: ajwfl/sampletodo:latest
-          ports:
-            - containerPort: 8080
+          image: ajwfl/meu_app:latest
+          imagePullPolicy: Always
           env:
-#           - name: DATABASE_URL
-#             value: jdbc:mysql://db:3306/curso
+            - name: DATABASE_URL
+              value: jdbc:mysql://db:3306/curso
             - name: "MYSQL_ROOT_PASSWORD"
               value: "root"
             - name: "MYSQL_DATABASE"

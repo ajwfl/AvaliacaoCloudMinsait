@@ -42,6 +42,7 @@ pipeline {
           echo "Aplicando manifestos do Kubernetes ..."
           withKubeConfig([credentialsId: 'kubeconfig']) {
             sh "kubectl apply -f ./k8s/"
+            sh "kubectl get all"
         }
         }
       }
