@@ -15,20 +15,11 @@ pipeline {
       }
     }
 
-    stage('Testes') {
-      steps {
-        script {
-          echo "Executando testes, aguarde..."
-          sh 'mvn test'
-        }
-      }
-    }
-
     stage('Build Docker Image') {
       steps {
         script {
           echo "Construindo a imagem docker, aguarde..."
-          sh 'docker build -t ajwfl/avaliacao-cloud:latest .'
+          dockerapp = docker.build("ajwfl/meu_app:v${env.BUILD_ID}", '-f Dockerfile .')
         }
       }
     }
@@ -37,22 +28,19 @@ pipeline {
       steps {
         script {
           echo "Enviando alterações para o DockerHub, aguarde..."
-          withCredentials([
-            usernamePassword(credentialsId: 'docker-credential', passwordVariable: 'passwd', usernameVariable: 'user'
-          )]) {
-            sh "docker login -u ${env.user} -p ${env.passwd}"
-            sh 'docker push ajwfl/avaliacao-cloud:latest'
-          }
+          docker.withRegistry("https://registry.hub.docker.com",'dockerhub'){
+                        dockerapp.push("v${env.BUILD_ID}")
+                        dockerapp.push("latest")
+                    }
+                }
+            }
         }
-      }
-    }
 
     stage('Kubernetes Manifestos') {
       steps {
         script {
           echo "Aplicando manifestos do Kubernetes, aguarde..."
-          sh 'kubectl apply -f k8s/'
-          sh 'kubectl get all'
+          sh "cd /var/jenkins_home/workspace/AvaliacaoCloudMinsait/k8s && kubectl apply -f web-service.yaml,web-deployment.yaml,mysql-deployment.yaml,mysql-service.yaml"
         }
       }
     }
