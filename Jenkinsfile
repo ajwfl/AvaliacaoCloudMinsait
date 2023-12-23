@@ -40,7 +40,7 @@ pipeline {
       steps {
         script {
           echo "Aplicando manifestos do Kubernetes, aguarde..."
-          sh "cd /var/jenkins_home/workspace/AvaliacaoCloudMinsait/k8s && kubectl apply -f web-service.yaml,web-deployment.yaml,mysql-deployment.yaml,mysql-service.yaml"
+          sh 'kubectl apply -f k8s/'
         }
       }
     }
