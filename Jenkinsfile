@@ -18,7 +18,7 @@ pipeline {
     stage('Testes Unitários') {
       steps {
         script {
-          echo "Executando testes, aguarde..."
+          echo "Executando os testes ..."
           sh 'mvn test'
         }
       }
