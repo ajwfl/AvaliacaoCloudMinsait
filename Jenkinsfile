@@ -15,6 +15,15 @@ pipeline {
       }
     }
 
+    stage('Testes Unitários') {
+      steps {
+        script {
+          echo "Executando testes, aguarde..."
+          sh 'mvn test'
+        }
+      }
+    }
+
     stage('Build Docker Image') {
       steps {
         script {
